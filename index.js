@@ -49,6 +49,7 @@ app.on('ready', () =>
 						'path' 		: jsonData.machines[index]['vagrantfile_path'],
 						'state' 	: jsonData.machines[index]['state'],
 						'name' 		: jsonData.machines[index]['extra_data']['box']['name'],
+                        'realname' 	: jsonData.machines[index]['name'],
 						'provider'	: jsonData.machines[index]['extra_data']['box']['provider'],
 					})
 				}
@@ -57,7 +58,10 @@ app.on('ready', () =>
 			})
 		})
 	}
-
+    var vagrantClearCache = function(event){
+        	runShell(contextMenu, menuItem, " vagrant global-status --prune")
+      
+    }
 	var vagrantManager = function(event) 
 	{
 		tray.setImage(path.join(__dirname, trayActive))
@@ -72,6 +76,13 @@ app.on('ready', () =>
 					vagrantManager()
 				}
 			},
+              	{
+				label: "Clear Cache",
+				click: function(menuItem)
+				{
+					vagrantManager()
+				}
+			},
 			{
 				type: "separator"
 			}]
@@ -79,7 +90,7 @@ app.on('ready', () =>
 			for(var index in box) {
 				menu.push(
 				{	
-					label: box[index]['name'],
+					label: box[index]['realname'],
 					icon: __dirname+"/assets/logo/"+box[index]['state']+".png",
 					submenu: [
 					{
